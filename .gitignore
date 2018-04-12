@@ -1,0 +1,7 @@
+.settings
+.vscode
+target/
+.classpath
+.project
+devDb.mv.db
+dependency-reduced-pom.xml
