@@ -1,13 +1,8 @@
-# Brendan Goldberg
+CSC435 Web Services Assignment 6
+Description of the project can be found in the INSTRUCTIONS.md file.
 
-How to start the Brendan Goldberg application
----
+This assignment is an extension of the previous assignments but written using Dropwizard.
 
-1. Run `mvn clean install` to build your application
-1. Start application with `java -jar target/assignment-6-1.0.jar server config.yml`
-1. To check that your application is running enter url `http://localhost:8080`
+Dropwizard creates an H2 instance, and writes/reads directly from that file.
 
-Health Check
----
-
-To see your applications health enter url `http://localhost:8081/healthcheck`
+This was chosen because the DB doesn't get removed after shutdown and just updates when needed since the domain classes don't have to be changed.
