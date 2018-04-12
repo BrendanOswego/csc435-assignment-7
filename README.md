@@ -1,4 +1,4 @@
-CSC435 Web Services Assignment 6
+## CSC435 Web Services Assignment 6
 Description of the project can be found in the INSTRUCTIONS.md file.
 
 This assignment is an extension of the previous assignments but written using Dropwizard.
