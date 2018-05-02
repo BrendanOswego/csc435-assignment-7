@@ -1,8 +1,5 @@
-## CSC435 Web Services Assignment 6
-Description of the project can be found in the INSTRUCTIONS.md file.
+## CSC435 Web Services Assignment 7
 
-This assignment is an extension of the previous assignments but written using Dropwizard.
+This assignment is an extension of the previous assignments but with the addition of the OAuth2 protocol.
 
-Dropwizard creates an H2 instance, and writes/reads directly from that file.
-
-This was chosen because the DB doesn't get removed after shutdown and just updates when needed since the domain classes don't have to be changed.
+This was an extra assignment requested to the professor so I can learn something new since I had the extra time to tackle OAuth2.
