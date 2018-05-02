@@ -1,0 +1,22 @@
+<html>
+
+<head>
+  <meta name="google-signin-client_id" content="{{googleContent}}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='assets/css/main.css'>
+</head>
+
+<body>
+  <div class='page'>
+    <a href='/register'>Register Client</a>
+    <div class='signin-container'>
+      <div id='google-signin'></div>
+      <button id='signout'>Sign Out</button>
+    </div>
+  </div>
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script content="{{googleContent}}" id='main-js' type='text/javascript' src='assets/js/main.js'></script>
+</body>
+
+</html>

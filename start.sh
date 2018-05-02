@@ -1,2 +1,2 @@
 #!/bin/sh
-java -jar target/assignment-6-1.0.jar server config.yml
+java -jar target/assignment-7-1.0.jar server config.yml

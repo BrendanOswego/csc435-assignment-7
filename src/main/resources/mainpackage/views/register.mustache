@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='UTF-8' />
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Register Application</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+
+  {{^submitted}}
+  <form action='/register' method='POST' id='register-form'>
+    <div class='form-section'>
+      <label for='app-name'>Application Name</label>
+      <input id='app-name' name='app-name' type='text'>
+    </div>
+    <div class='form-section'>
+      <label for='app-url'>Application Homepage</label>
+      <input id='app-url' name='app-url' type='text'>
+    </div>
+    <div class='form-section'></div>
+    <div class='form-section'>
+      <input type='submit'>
+    </div>
+  </form>
+  <script type='text/javascript'>
+    const form = document.getElementById('register-form');
+    const app_name = document.getElementById('app-name');
+    const app_url = document.getElementById('app-url');
+    form.onsubmit = () => {
+      console.log(app_name.value);
+      console.log(app_url.value);
+    }
+  </script>
+  {{/submitted}}
+  
+  {{#submitted}}
+    <p>Client ID: {{clientId}}</p>
+    <p>Client Secret: {{clientSecret}}</p>
+  {{/submitted}}
+</body>
+
+</html>

@@ -6,7 +6,6 @@ database:
 
   properties:
     charSet: UTF-8
-    hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
   
   maxWaitForConnection: 1s
   validationQuery: "/* Postgres Health Check */ SELECT 1"
@@ -15,13 +14,17 @@ database:
   checkConnectionWhileIdle: false
 
 server:
-  type: simple
-  applicationContextPath: /
-  adminContextPath: /admin
-  connector:
-    type: http
-    port: 8080
-  rootPath: /
+  adminMinThreads: 1
+  adminMaxThreads: 64
+  applicationConnectors:
+    - type: http
+      port: 8080
+    - type: https
+      port: 8090
+      keyStorePath: src/main/resources/store/keystore.jks
+      keyStorePassword: bestpassword
+      validateCerts: false
+      certAlias: csc435
 
 logging:
   level: INFO

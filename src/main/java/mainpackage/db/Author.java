@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,16 +11,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.hibernate.annotations.GenericGenerator;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "author")
 public class Author {
 
   @Id
-  @GeneratedValue(generator = "UUID")
-  @GenericGenerator(name = "UUID", strategy = "")
   @Column(name = "id", updatable = false, nullable = false)
   @JsonProperty
   private UUID id;
