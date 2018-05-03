@@ -20,9 +20,11 @@ import mainpackage.controllers.TokenController;
 import mainpackage.controllers.UserController;
 import mainpackage.controllers.BookController;
 import mainpackage.mappers.AuthorMapper;
+import mainpackage.mappers.AuthorizationMapper;
 import mainpackage.mappers.BookAuthorMapper;
 import mainpackage.mappers.BookMapper;
 import mainpackage.mappers.ClientMapper;
+import mainpackage.mappers.TokenMapper;
 import mainpackage.mappers.UserMapper;
 
 public class MainApplication extends Application<Config> {
@@ -51,12 +53,14 @@ public class MainApplication extends Application<Config> {
     database.registerRowMapper(new BookAuthorMapper());
     database.registerRowMapper(new UserMapper());
     database.registerRowMapper(new ClientMapper());
+    database.registerRowMapper(new AuthorizationMapper());
+    database.registerRowMapper(new TokenMapper());
 
     final IndexController index = new IndexController();
     final AuthorController authors = new AuthorController(database);
     final BookController books = new BookController(database);
     final AuthorizeController authorize = new AuthorizeController(database);
-    final TokenController token = new TokenController();
+    final TokenController token = new TokenController(database);
     final UserController users = new UserController(database);
     final RegistrationController register = new RegistrationController(database);
 

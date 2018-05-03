@@ -49,4 +49,51 @@ public class Credentials {
     }
   }
 
+  public String authorizationCode(String clientId) {
+    try {
+      MessageDigest sha256 = MessageDigest.getInstance("sha-256");
+      sha256.update(clientId.getBytes());
+      byte[] bytes = sha256.digest();
+      BigInteger n = new BigInteger(1, bytes);
+      return String.format("%032x", n);
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  public String accessToken(String clientId, String code, String redirectUri) {
+    try {
+      MessageDigest md5 = MessageDigest.getInstance("md5");
+      Long time = System.currentTimeMillis();
+      md5.update(time.byteValue());
+      md5.update(clientId.getBytes());
+      md5.update(code.getBytes());
+      md5.update(redirectUri.getBytes());
+      byte[] bytes = md5.digest();
+      BigInteger n = new BigInteger(1, bytes);
+      return String.format("%032x", n);
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  public String refreshToken(String clientSecret, String code, String redirectUri) {
+    try {
+      MessageDigest md5 = MessageDigest.getInstance("md5");
+      Long time = System.currentTimeMillis();
+      md5.update(time.byteValue());
+      md5.update(clientSecret.getBytes());
+      md5.update(code.getBytes());
+      md5.update(redirectUri.getBytes());
+      byte[] bytes = md5.digest();
+      BigInteger n = new BigInteger(1, bytes);
+      return String.format("%032x", n);
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
 }

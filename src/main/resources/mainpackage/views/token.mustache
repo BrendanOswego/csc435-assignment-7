@@ -9,10 +9,18 @@
 </head>
 
 <body>
-  <form id='form-authorize' action='/authorize' method='POST'>
+  <form id='form-authorize' action='/token' method='POST'>
+    <div class='form-section'>
+      <label for='code'>Access Code</label>
+      <input name='code' type='text'>
+    </div>
     <div class='form-section'>
       <label for='client-id'>Client ID</label>
       <input name='client-id' type='text'>
+    </div>
+    <div class='form-section'>
+      <label for='client-secret'>Client Secret</label>
+      <input name='client-secret' type='text'>
     </div>
     <div class='form-section'>
       <label for='redirect-uri'>Redirect URI</label>

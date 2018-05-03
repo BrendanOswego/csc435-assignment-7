@@ -17,7 +17,7 @@ public class TokenResponse {
    * the expiration time via other means or document the default value.
    */
   @JsonProperty
-  private String expires_in;
+  private int expires_in;
 
   /**
    * issued to the client by the authorization server and are used to obtain a new
@@ -34,24 +34,16 @@ public class TokenResponse {
   @JsonProperty
   private String token_type = "bearer";
 
-  /**
-   * The value of the scope parameter is expressed as a list of space- delimited,
-   * case-sensitive strings. The strings are defined by the authorization server.
-   * If the value contains multiple space-delimited strings, their order does not
-   * matter, and each string adds an additional access range to the requested
-   * scope.
-   * 
-   * scope = scope-token * (SP scope-token) scope-token = 1*( %x21 / %x23-5B /
-   * %x5D-7E )
-   */
-  @JsonProperty
-  private String scope;
+  public String getAccessToken() {
+    return access_token;
+  }
 
-  /**
-   * if the "state" parameter was present in the client authorization request. The
-   * exact value received from the client.
-   */
-  @JsonProperty
-  private String state;
+  public int getExpiresIn() {
+    return expires_in;
+  }
+
+  public String getRefreshToken() {
+    return refresh_token;
+  }
 
 }

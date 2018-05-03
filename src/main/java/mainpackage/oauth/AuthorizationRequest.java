@@ -12,13 +12,12 @@ public class AuthorizationRequest {
   @JsonProperty
   private String redirect_uri;
 
-  @JsonProperty
-  private String scope;
-
-  @JsonProperty
-  private String state;
-
   private AuthorizationRequest() {
+  }
+
+  public AuthorizationRequest(String client_id, String redirect_url) {
+    this.client_id = client_id;
+    this.redirect_uri = redirect_url;
   }
 
   public String getResponseType() {
@@ -31,14 +30,6 @@ public class AuthorizationRequest {
 
   public String getRedirectUri() {
     return redirect_uri;
-  }
-
-  public String getScope() {
-    return scope;
-  }
-
-  public String getState() {
-    return state;
   }
 
 }
