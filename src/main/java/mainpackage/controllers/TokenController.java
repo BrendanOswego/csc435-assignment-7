@@ -1,99 +1,78 @@
 package mainpackage.controllers;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.logging.FormatWith;
 import org.jdbi.v3.core.Jdbi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import mainpackage.dao.AuthorizationDAO;
-import mainpackage.dao.ClientDAO;
+import mainpackage.dao.RegisterDAO;
 import mainpackage.dao.TokenDAO;
-import mainpackage.db.Authorization;
-import mainpackage.db.Client;
-import mainpackage.db.Token;
+import mainpackage.db.Register;
 import mainpackage.helpers.Credentials;
-import mainpackage.oauth.TokenRequest;
-import mainpackage.oauth.TokenResponse;
-import mainpackage.views.TokenView;
+import mainpackage.oauth.Token;
 
-@Path("/token")
+@Path("/oauth2/token")
 public class TokenController {
 
+  Logger logger = LoggerFactory.getLogger(TokenController.class);
+
   private TokenDAO tokenDAO;
-  private ClientDAO clientDAO;
-  private AuthorizationDAO authorizeDAO;
+  private RegisterDAO registerDAO;
 
   public TokenController(Jdbi database) {
     tokenDAO = database.onDemand(TokenDAO.class);
-    clientDAO = database.onDemand(ClientDAO.class);
-    authorizeDAO = database.onDemand(AuthorizationDAO.class);
-  }
-
-  @GET
-  public TokenView index() {
-    return new TokenView();
-  }
-
-  @POST
-  @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response authorize(TokenRequest req) {
-    if (req.getClientId() == null || req.getClientSecret() == null || req.getCode() == null
-        || req.getRedirectUri() == null)
-      return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-
-    Client client = clientDAO.get(req.getClientId());
-    Authorization authorize = authorizeDAO.get(req.getClientId());
-
-    if (client == null || (!authorize.getCode().equals(req.getCode())))
-      return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-
-    // NOW YOU CAN DO FUN STUFF
-    String access_token = Credentials.instance().accessToken(req.getClientId(), req.getCode(), req.getRedirectUri());
-    String refresh_token = Credentials.instance().refreshToken(req.getClientSecret(), req.getCode(),
-        req.getRedirectUri());
-
-    int expires_in = 3600;
-
-    tokenDAO.insert(req.getClientId(), access_token, refresh_token, expires_in);
-
-    Token token = tokenDAO.get(req.getClientId());
-
-    return Response.ok(token).build();
+    registerDAO = database.onDemand(RegisterDAO.class);
   }
 
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response authorize(@FormParam("code") String code, @FormParam("client-id") String client_id,
-      @FormParam("client-secret") String client_secret, @FormParam("redirect-uri") String redirect_uri) {
-    if (code == null || client_id == null || client_secret == null || redirect_uri == null)
-      return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+  public Response post(@FormParam("grant_type") String grant_type, @FormParam("code") String code,
+      @FormParam("redirect_uri") String redirect_uri, @FormParam("client_id") String client_id) {
 
-    Client client = clientDAO.get(client_id);
-    Authorization authorize = authorizeDAO.get(client_id);
-
-    if (client == null || (!authorize.getCode().equals(code)))
-      return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-
-    // NOW YOU CAN DO FUN STUFF
+    Register client = registerDAO.get(client_id);
+    if (client == null) {
+      return Response.status(Response.Status.NO_CONTENT).build();
+    }
 
     String access_token = Credentials.instance().accessToken(client_id, code, redirect_uri);
-    String refresh_token = Credentials.instance().refreshToken(client_secret, code, redirect_uri);
+    String refresh_token = Credentials.instance().refreshToken(client.getClientSecret(), code, redirect_uri);
 
     int expires_in = 3600;
 
-    tokenDAO.insert(client_id, access_token, refresh_token, expires_in);
+    String token_type = "Bearer";
 
-    Token token = tokenDAO.get(client_id);
+    tokenDAO.insert(access_token, token_type, expires_in, refresh_token, client_id);
 
-    return Response.ok(token).build();
+    Token token = tokenDAO.get(access_token);
+    if (token == null)
+      return Response.status(Response.Status.CONFLICT).build();
+
+    return Response.ok().entity(token).build();
+  }
+
+  @DELETE
+  @Path("{access_token}")
+  public Response delete(@PathParam("access_token") String access_token) {
+    Token token = tokenDAO.get(access_token);
+    if (token == null)
+      return Response.status(Response.Status.NOT_FOUND).build();
+
+    tokenDAO.delete(access_token);
+
+    return Response.status(Response.Status.NO_CONTENT).build();
   }
 
 }

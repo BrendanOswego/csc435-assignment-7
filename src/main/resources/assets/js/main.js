@@ -8,7 +8,7 @@ window.onload = () => {
     instance = gapi.auth2.init({
       client_id: `${googleContent}`,
       scope: 'profile email',
-      fetch_basic_profile: false
+      fetch_basic_profile: true
     })
     if (!instance.isSignedIn.get()) {
       renderButton();

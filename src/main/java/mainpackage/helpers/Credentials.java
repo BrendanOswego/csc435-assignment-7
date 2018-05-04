@@ -4,8 +4,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import mainpackage.oauth.TokenRequest;
-
 public class Credentials {
 
   private static Credentials instance = null;
@@ -14,10 +12,6 @@ public class Credentials {
     if (instance == null)
       instance = new Credentials();
     return instance;
-  }
-
-  public String accessToken(TokenRequest req) {
-    return null;
   }
 
   public String clientId(String name, String url) {
