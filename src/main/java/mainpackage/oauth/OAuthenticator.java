@@ -1,5 +1,6 @@
 package mainpackage.oauth;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,11 @@ public class OAuthenticator implements Authenticator<String, OAuthUser> {
     logger.info("TOKEN: " + token);
     for (Token t : tokens) {
       if (t.getAccessToken().equals(token)) {
+        long now = Instant.now().getEpochSecond();
+        if (now >= t.getExpires()) {
+          logger.info("TOKEN EXPIRED");
+          return Optional.empty();
+        }
         List<String> roles = new ArrayList<>();
         roles.add(OAuthRoles.READ_ONLY);
         return Optional.of(new OAuthUser(t.getClientId(), roles));

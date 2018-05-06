@@ -13,7 +13,7 @@ public class TokenMapper implements RowMapper<Token> {
   @Override
   public Token map(ResultSet rs, StatementContext ctx) throws SQLException {
     return new Token(rs.getString("access_token"), rs.getString("token_type"), rs.getInt("expires_in"),
-        rs.getString("refresh_token"), rs.getString("client_id"));
+        rs.getString("refresh_token"), rs.getString("client_id"), rs.getLong("issued"), rs.getLong("expires"));
   }
 
 }

@@ -3,6 +3,7 @@ package mainpackage.helpers;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 
 public class Credentials {
 
@@ -59,7 +60,7 @@ public class Credentials {
   public String accessToken(String clientId, String code, String redirectUri) {
     try {
       MessageDigest md5 = MessageDigest.getInstance("md5");
-      Long time = System.currentTimeMillis();
+      Long time = Instant.now().getEpochSecond();
       md5.update(time.byteValue());
       md5.update(clientId.getBytes());
       md5.update(code.getBytes());
@@ -76,7 +77,7 @@ public class Credentials {
   public String refreshToken(String clientSecret, String code, String redirectUri) {
     try {
       MessageDigest md5 = MessageDigest.getInstance("md5");
-      Long time = System.currentTimeMillis();
+      Long time = Instant.now().getEpochSecond();
       md5.update(time.byteValue());
       md5.update(clientSecret.getBytes());
       md5.update(code.getBytes());

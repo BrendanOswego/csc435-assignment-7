@@ -8,10 +8,12 @@ import org.jdbi.v3.core.Jdbi;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
+
 import mainpackage.controllers.AuthorController;
 import mainpackage.controllers.AuthorizeController;
 import mainpackage.controllers.IndexController;
@@ -21,6 +23,7 @@ import mainpackage.controllers.UserController;
 import mainpackage.controllers.BookController;
 import mainpackage.controllers.CallbackController;
 import mainpackage.mappers.AuthorMapper;
+import mainpackage.mappers.AuthorizeMapper;
 import mainpackage.mappers.BookAuthorMapper;
 import mainpackage.mappers.BookMapper;
 import mainpackage.mappers.RegisterMapper;
@@ -55,6 +58,7 @@ public class MainApplication extends Application<Config> {
     database.registerRowMapper(new BookAuthorMapper());
     database.registerRowMapper(new RegisterMapper());
     database.registerRowMapper(new TokenMapper());
+    database.registerRowMapper(new AuthorizeMapper());
 
     final IndexController index = new IndexController();
     final AuthorController authors = new AuthorController(database);
@@ -63,7 +67,7 @@ public class MainApplication extends Application<Config> {
     final RegisterController register = new RegisterController(database);
     final TokenController token = new TokenController(database);
     final CallbackController callback = new CallbackController();
-    final UserController user = new UserController();
+    final UserController user = new UserController(database);
 
     environment.jersey().register(index);
     environment.jersey().register(authors);
@@ -80,6 +84,8 @@ public class MainApplication extends Application<Config> {
                 .setAuthorizer(new OAuthorization()).setPrefix("Bearer").buildAuthFilter()));
 
     environment.jersey().register(RolesAllowedDynamicFeature.class);
+
+    environment.jersey().register(new AuthValueFactoryProvider.Binder<>(OAuthUser.class));
   }
 
 }

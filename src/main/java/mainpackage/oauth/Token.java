@@ -1,5 +1,7 @@
 package mainpackage.oauth;
 
+import java.math.BigInteger;
+
 import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,15 +26,24 @@ public class Token {
   @JsonProperty
   private String client_id;
 
+  @JsonIgnore
+  private long expires;
+
+  @JsonIgnore
+  private long issued;
+
   private Token() {
   }
 
-  public Token(String access_token, String token_type, int expires_in, String refresh_token, String client_id) {
+  public Token(String access_token, String token_type, int expires_in, String refresh_token, String client_id,
+      long issued, long expires) {
     this.access_token = access_token;
     this.token_type = token_type;
     this.expires_in = expires_in;
     this.refresh_token = refresh_token;
     this.client_id = client_id;
+    this.issued = issued;
+    this.expires = expires;
   }
 
   @JsonIgnore
@@ -58,6 +69,16 @@ public class Token {
   @JsonIgnore
   public String getClientId() {
     return client_id;
+  }
+
+  @JsonIgnore
+  public long getIssued() {
+    return issued;
+  }
+
+  @JsonIgnore
+  public long getExpires() {
+    return expires;
   }
 
 }

@@ -10,11 +10,11 @@ import mainpackage.oauth.Token;
 
 public interface TokenDAO {
 
-    @SqlUpdate("insert into token (access_token, token_type, expires_in, refresh_token, client_id) select :access_token, :token_type, :expires_in, :refresh_token, :client_id "
+    @SqlUpdate("insert into token (access_token, token_type, expires_in, refresh_token, client_id, issued, expires) select :access_token, :token_type, :expires_in, :refresh_token, :client_id, :issued, :expires "
             + "where not exists(select access_token from token where access_token = :access_token)")
     public void insert(@Bind("access_token") String access_token, @Bind("token_type") String token_type,
             @Bind("expires_in") int expires_in, @Bind("refresh_token") String refresh_token,
-            @Bind("client_id") String client_id);
+            @Bind("client_id") String client_id, @Bind("issued") long issued, @Bind("expires") long expires);
 
     @SqlQuery("select * from token where (access_token = :access_token)")
     public Token get(@Bind("access_token") String access_token);
