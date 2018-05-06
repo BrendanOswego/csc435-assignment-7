@@ -1,12 +1,9 @@
 package mainpackage.oauth;
 
-import java.math.BigInteger;
-
 import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @Entity
 public class Token {
